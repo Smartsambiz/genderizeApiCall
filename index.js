@@ -16,6 +16,10 @@ app.use("/api", getgenderRoutes)
 
 const PORT = process.env.PORT || 3000;
 
+app.use('/', (req, res)=>{
+    res.send("server is live")
+})
+
 app.listen(PORT, ()=>{
     console.log(`Server running on port ${PORT}`);
 });

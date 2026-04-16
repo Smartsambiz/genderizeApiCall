@@ -1,0 +1,103 @@
+📌 Gender Classification API
+
+A simple backend API that classifies a name by gender using the Genderize API, processes the response, and returns a structured result with confidence evaluation.
+
+🚀 Base URL
+genderizeapicall-production.up.railway.app
+📍 Endpoint
+GET /api/classify?name={name}
+
+Classifies a given name and returns processed gender prediction data.
+
+✅ Example Request
+GET /api/classify?name=samuel
+📦 Success Response (200 OK)
+{
+  "status":"success",
+  "data":{"name":"samuel",
+  "gender":"male",
+  "probability":0.99,
+  "sample_size":603089,
+  "is_confident":true,
+  "processed_at":"2026-04-16T14:51:27.952Z"
+  }
+}
+❌ Error Responses
+400 Bad Request
+
+Missing or empty name parameter
+
+{
+  "status": "error",
+  "message": "Name query parameter is required"
+}
+422 Unprocessable Entity
+
+Invalid input or no prediction available
+
+{
+  "status": "error",
+  "message": "No prediction available for the provided name"
+}
+502 Bad Gateway
+
+External API failure
+
+{
+  "status": "error",
+  "message": "Failed to fetch data from external API"
+}
+⚙️ Processing Logic
+Extracts:
+gender
+probability
+count → renamed to sample_size
+Computes:
+is_confident:
+true if:
+probability ≥ 0.7 AND
+sample_size ≥ 100
+otherwise false
+Generates:
+processed_at: Current UTC timestamp in ISO 8601 format
+⚠️ Edge Case Handling
+
+If the external API returns:
+
+gender: null OR
+count: 0
+
+The API responds with:
+
+{
+  "status": "error",
+  "message": "No prediction available for the provided name"
+}
+🌐 CORS
+
+CORS is enabled:
+
+Access-Control-Allow-Origin: *
+🛠 Tech Stack
+Node.js
+Express.js
+Axios
+CORS
+▶️ Running Locally
+npm install
+node index.js
+
+Server runs on:
+
+https://genderizeapicall-production.up.railway.app/
+🧪 Testing
+
+Example:
+
+https://genderizeapicall-production.up.railway.app/api/classify?name=samuel
+
+
+📌 Notes
+Response time optimized (excluding external API latency)
+Handles multiple concurrent requests
+Input is normalized (trimmed and lowercase)
